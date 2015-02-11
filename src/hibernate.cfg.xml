@@ -19,7 +19,7 @@
 		<property name="hibernate.connection.password">
 			root
 		</property>
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 
 		<!-- list of XML mapping files -->		
 		<mapping class="org.testhibernate.entity.Exhibitor" resource="org/testhibernate/resource/Exhibitor.hbm.xml"/>

@@ -11,13 +11,24 @@ import java.sql.Date;
 
 
 
+
+
+
+
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedNativeQueries;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
+
+import org.hibernate.procedure.internal.Util.ResultClassesResolutionContext;
 
 
 /**
@@ -25,6 +36,22 @@ import javax.persistence.Table;
  * Date: Feb 10, 2015
  * Time: 10:49:43 AM
  */
+
+//@NamedStoredProcedureQuery(name = "getexhibitor", 
+//	procedureName = "getexhibitor", 
+//	parameters = {
+//		@StoredProcedureParameter(name = "exhid", type = Integer.class),
+//		@StoredProcedureParameter(name = "curs1", type = String.class)
+//	},
+//	resultClasses = AnnotationExhibitor.class)
+
+@NamedNativeQueries({
+	@NamedNativeQuery (
+			name="getexhibitor",
+			query="select getexhibitor(11,\"exhibitor\")",
+			resultClass = AnnotationExhibitor.class
+			) 
+})
 
 @Entity
 @Table(name = "exhibitor")

@@ -23,6 +23,9 @@ import org.testhibernate.entity.WirePayment;
  * Time: 12:30:19 PM
  */
 public class Main {
+	//about flush
+	//http://stackoverflow.com/questions/3274958/question-about-hibernate-session-flush
+	
 	private static final String DOTS = "------------------";
 	public static void main(String[] args) {
 //		create();
@@ -43,14 +46,88 @@ public class Main {
 		
 //		namedQuery();
 		
-		namedParameterBinding();
+//		namedParameterBinding();
+		
+//		positionalParameterBinding();
+		
+		callingStoredProcedure();
+	}
+	
+	public static void callingStoredProcedure(){
+		Session session = null;
+		try{
+			session = buildSession();
+			System.out.println("Calling Stored Procedure");
+			
+////			session.createSQLQuery("BEGIN");
+//			session.createSQLQuery("SELECT getexhibitor(11,'exhibitor')");
+//			Query query = session.createSQLQuery("FETCH ALL IN \"exhibitor\"").
+//					addEntity(AnnotationExhibitor.class);
+////			session.createSQLQuery("COMMIT");
+			
+			Query query = session.getNamedQuery("getexhibitor");
+//		    query.setParameter("exhid", 11);
+//		    query.setParameter("curs1", "exhibitor");
+		    List<AnnotationExhibitor> answers = query.list();
+			
+			
+			Iterator<AnnotationExhibitor> it = query.iterate();
+			while(it.hasNext()){
+				AnnotationExhibitor exhibitor = it.next();
+				System.out.println("Id: "+exhibitor.getId());
+				System.out.println("Name: "+exhibitor.getName());
+				System.out.println(DOTS);
+			}
+			
+			session.getTransaction().commit();
+			System.out.println("Done!");
+			
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally{
+			if(session != null){
+				session.close();
+			}
+		}
+	}
+	
+	public static void positionalParameterBinding(){
+		Session session = null;
+		try{
+			session = buildSession();
+			System.out.println("Positional Parameter Binding");
+			
+			Query query = session.createSQLQuery("SELECT * FROM exhibitor WHERE name ilike ?").
+					addEntity(AnnotationExhibitor.class);
+			
+			List<AnnotationExhibitor> list = query.
+					setString(0, "%jew%").
+					list();
+			
+			System.out.println("Retrieving "+list.size()+" Records:");
+			
+			Iterator<AnnotationExhibitor> it = list.iterator();
+			while(it.hasNext()){
+				AnnotationExhibitor exhibitor = it.next();
+				System.out.println("Id: "+exhibitor.getId());
+				System.out.println("Name: "+exhibitor.getName());
+				System.out.println(DOTS);
+			}
+			
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally{
+			if(session != null){
+				session.close();
+			}
+		}
 	}
 	
 	public static void namedParameterBinding(){
 		Session session = null;
 		try{
 			session = buildSession();
-			System.out.println("Executing Polymorphic HQL");
+			System.out.println("Named Parameter Binding");
 			
 			Query query = session.createSQLQuery("SELECT * FROM exhibitor WHERE name ilike :name").
 					addEntity(AnnotationExhibitor.class);
