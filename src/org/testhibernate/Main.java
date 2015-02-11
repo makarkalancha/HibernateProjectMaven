@@ -3,6 +3,7 @@ package org.testhibernate;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -37,7 +38,69 @@ public class Main {
 		
 //		simpleHQLQuery();
 		
-		polymorphicQuery();
+//		polymorphicQuery();
+		
+//		namedQuery();
+		
+		namedParameterBinding();
+	}
+	
+	public static void namedParameterBinding(){
+		Session session = null;
+		try{
+			session = buildSession();
+			System.out.println("Executing Polymorphic HQL");
+			
+			Query query = session.getNamedQuery("findExhibitorByID");
+			query.setInteger("exhibitorId", 11);
+			
+			List<Exhibitor> list = query.list();
+			
+			ListIterator<Exhibitor> it = list.listIterator();
+			while(it.hasNext()){
+				Exhibitor exhibitor = it.next();
+				System.out.println("Exhibitor id: "+exhibitor.getId());
+				System.out.println("Name: "+exhibitor.getName());
+				System.out.println();
+			}
+			
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally{
+			if(session != null){
+				session.flush();
+				session.close();
+			}
+		}
+	}
+	
+	public static void namedQuery(){
+		Session session = null;
+		try{
+			session = buildSession();
+			System.out.println("Name Query");
+			
+			Query query = session.getNamedQuery("findExhibitorByID");
+			query.setInteger("exhibitorId", 11);
+			
+			List<Exhibitor> list = query.list();
+			
+			ListIterator<Exhibitor> it = list.listIterator();
+			while(it.hasNext()){
+				Exhibitor exhibitor = it.next();
+				System.out.println("Exhibitor id: "+exhibitor.getId());
+				System.out.println("Name: "+exhibitor.getName());
+				System.out.println();
+			}
+			
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}finally{
+			if(session != null){
+				session.flush();
+				session.close();
+			}
+		}
 	}
 	
 	public static void polymorphicQuery(){
@@ -71,17 +134,6 @@ public class Main {
 				}
 			}
 			
-			
-			
-			
-			session.beginTransaction();
-			
-			AnnotationExhibitor exhibitor = new AnnotationExhibitor();
-			exhibitor.setId(250003);
-			
-			session.delete(exhibitor);
-			session.getTransaction().commit();
-			System.out.println("Done!");
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}finally{
