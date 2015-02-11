@@ -23,6 +23,7 @@ import org.testhibernate.entity.WirePayment;
  * Time: 12:30:19 PM
  */
 public class Main {
+	private static final String DOTS = "------------------";
 	public static void main(String[] args) {
 //		create();
 //		read();
@@ -51,24 +52,27 @@ public class Main {
 			session = buildSession();
 			System.out.println("Executing Polymorphic HQL");
 			
-			Query query = session.getNamedQuery("findExhibitorByID");
-			query.setInteger("exhibitorId", 11);
+			Query query = session.createSQLQuery("SELECT * FROM exhibitor WHERE name ilike :name").
+					addEntity(AnnotationExhibitor.class);
 			
-			List<Exhibitor> list = query.list();
+			List<AnnotationExhibitor> list = query.
+					setString("name", "%jew%").
+					list();
 			
-			ListIterator<Exhibitor> it = list.listIterator();
+			System.out.println("Retrieving "+list.size()+" Records:");
+			
+			Iterator<AnnotationExhibitor> it = list.iterator();
 			while(it.hasNext()){
-				Exhibitor exhibitor = it.next();
-				System.out.println("Exhibitor id: "+exhibitor.getId());
+				AnnotationExhibitor exhibitor = it.next();
+				System.out.println("Id: "+exhibitor.getId());
 				System.out.println("Name: "+exhibitor.getName());
-				System.out.println();
+				System.out.println(DOTS);
 			}
 			
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}finally{
 			if(session != null){
-				session.flush();
 				session.close();
 			}
 		}
@@ -112,13 +116,13 @@ public class Main {
 			List<Payment> results = session.createQuery("from Payment p").list();
 			System.out.println("Retrieving "+results.size()+" Records:");
 			Iterator<Payment> it = results.iterator();
-			String dots = "------------------";
+			
 			while(it.hasNext()){
 				Payment p = it.next();
-				System.out.println(dots);
+				System.out.println(DOTS);
 				if(p instanceof CreditCardPayment){
 					System.out.println("Credit Card Payment");
-					System.out.println(dots);
+					System.out.println(DOTS);
 					CreditCardPayment cc = (CreditCardPayment) p;
 					System.out.println("PaymentId: "+cc.getPaymentID());
 					System.out.println("Credi Card Number: "+cc.getCreditCardNumber());
@@ -126,7 +130,7 @@ public class Main {
 				
 				if(p instanceof WirePayment){
 					System.out.println("Wire Payment");
-					System.out.println(dots);
+					System.out.println(DOTS);
 					WirePayment wire = (WirePayment) p;
 					System.out.println("PaymentId: "+wire.getPaymentID());
 					System.out.println("BankName: "+wire.getBankName());
@@ -152,10 +156,10 @@ public class Main {
 			System.out.println("Retrieving "+results.size()+" Recoreds:");
 			for(Iterator<AnnotationExhibitor> it = results.iterator();it.hasNext();){
 				AnnotationExhibitor exhibitor = it.next();
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				System.out.println(exhibitor);
 				System.out.println("exhibitor shorname:"+exhibitor.getShortName());
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				exhibitor.setShortName("new shortname");
 			}
 			
@@ -200,10 +204,10 @@ public class Main {
 			
 			for(Iterator<AnnotationExhibitor> it = query.iterate();it.hasNext();){
 				AnnotationExhibitor exhibitor = it.next();
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				System.out.println(exhibitor);
 				System.out.println("exhibitor shorname:"+exhibitor.getShortName());
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				exhibitor.setShortName("new shortname");
 			}
 			
@@ -234,9 +238,9 @@ public class Main {
 			
 //			for(Iterator<AnnotationExhibitor> it = list.iterator();it.hasNext();){
 //				AnnotationExhibitor exhibitor = it.next();
-//				System.out.println("---------------");
+//				System.out.println(DOTS);
 //				System.out.println(exhibitor);
-//				System.out.println("---------------");
+//				System.out.println(DOTS);
 //			}
 			
 			session.getTransaction().commit();
@@ -264,9 +268,9 @@ public class Main {
 			
 			for(Iterator<AnnotationExhibitor> it = query.iterate();it.hasNext();){
 				AnnotationExhibitor exhibitor = it.next();
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				System.out.println(exhibitor);
-				System.out.println("---------------");
+				System.out.println(DOTS);
 			}
 			
 			session.getTransaction().commit();
@@ -340,10 +344,10 @@ public class Main {
 			
 			for(Iterator<Exhibitor> it = query.iterate();it.hasNext();){
 				Exhibitor exhibitor = it.next();
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				System.out.println(exhibitor);
 				System.out.println("exhibitor shorname:"+exhibitor.getShortName());
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				exhibitor.setShortName("new shortname");
 			}
 			
@@ -374,9 +378,9 @@ public class Main {
 			
 //			for(Iterator<Exhibitor> it = list.iterator();it.hasNext();){
 //				Exhibitor exhibitor = it.next();
-//				System.out.println("---------------");
+//				System.out.println(DOTS);
 //				System.out.println(exhibitor);
-//				System.out.println("---------------");
+//				System.out.println(DOTS);
 //			}
 			
 			session.getTransaction().commit();
@@ -404,9 +408,9 @@ public class Main {
 			
 			for(Iterator<Exhibitor> it = query.iterate();it.hasNext();){
 				Exhibitor exhibitor = it.next();
-				System.out.println("---------------");
+				System.out.println(DOTS);
 				System.out.println(exhibitor);
-				System.out.println("---------------");
+				System.out.println(DOTS);
 			}
 			
 			session.getTransaction().commit();
