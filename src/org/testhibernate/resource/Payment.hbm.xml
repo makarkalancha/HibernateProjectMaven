@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.testhibernate.entity.Payment" table="payment" discriminator-value="P">
+		<meta attribute="class-description">
+			Category
+		</meta>
+		<id name="paymentId" column="payment_id">
+			<generator class="native"/>
+		</id>
+		
+		<discriminator type="character">
+			<formula>
+				case
+				when creditCardName is not null then 'C'
+				when bankName is not null then 'W'
+				else 'P'
+				end
+			</formula>
+		</discriminator>
+		
+		<property name="paymentAmount" column="payment_amount" type="float"/>
+		
+		<subclass name="org.testhibernate.entity.WirePayment" discriminator-value="W">
+			<property name="bankName" type="string"/>
+			<property name="bankRef" type="string"/>
+		</subclass>
+		
+		<subclass name="org.testhibernate.entity.CreditCardPayment" discriminator-value="C">
+			<property name="creditCardName" type="string"/>
+		</subclass>
+	</class>
+</hibernate-mapping>

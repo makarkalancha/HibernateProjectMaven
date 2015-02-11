@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="org.testhibernate.entity.Category" table="exhibitor">
+		<meta attribute="class-description">
+			Category
+		</meta>
+		<id name="id" type="int" column="id">
+			<generator class="sequence">
+				<param name="sequence">category_id_seq</param>
+			</generator>
+		</id>
+		<property name="parentCategoryId" column="parent_category_id" type="int"/>
+		<property name="domain" column="domain" type="string"/>
+		<property name="displaySequence" column="displaysequence" type="int"/>
+		<property name="code" column="code" type="string"/>
+		<property name="name" column="name" type="string"/>
+		<property name="domainParam1" column="domainparam1" type="string"/>
+		<property name="domainParam2" column="domainparam2" type="string"/>
+		<property name="foreignId" column="foreignid" type="string"/>
+		<property name="deleted" column="deleted" type="boolean"/>
+		<property name="creationTime" column="creationtime" type="date"/>
+		<property name="updateTime" column="updatetime" type="date"/>
+	</class>
+</hibernate-mapping>
