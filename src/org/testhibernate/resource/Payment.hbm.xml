@@ -7,14 +7,14 @@
 		<meta attribute="class-description">
 			Category
 		</meta>
-		<id name="paymentId" column="payment_id">
+		<id name="paymentID" column="payment_id">
 			<generator class="native"/>
 		</id>
 		
 		<discriminator type="character">
 			<formula>
 				case
-				when creditCardName is not null then 'C'
+				when creditCardNumber is not null then 'C'
 				when bankName is not null then 'W'
 				else 'P'
 				end
@@ -29,7 +29,7 @@
 		</subclass>
 		
 		<subclass name="org.testhibernate.entity.CreditCardPayment" discriminator-value="C">
-			<property name="creditCardName" type="string"/>
+			<property name="creditCardNumber" type="string"/>
 		</subclass>
 	</class>
 </hibernate-mapping>

@@ -8,18 +8,18 @@ import java.io.Serializable;
  * Time: 2:42:07 PM
  */
 public class CreditCardPayment extends Payment implements Serializable{
-	private String creditCardName;
+	private String creditCardNumber;
 	
 	public CreditCardPayment(){
 		
 	}
 
-	public String getCreditCardName() {
-		return creditCardName;
+	public String getCreditCardNumber() {
+		return creditCardNumber;
 	}
 
-	public void setCreditCardName(String creditCardName) {
-		this.creditCardName = creditCardName;
+	public void setCreditCardNumber(String creditCardName) {
+		this.creditCardNumber = creditCardName;
 	}
 	
 	

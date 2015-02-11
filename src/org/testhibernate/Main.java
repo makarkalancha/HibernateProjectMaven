@@ -11,7 +11,10 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.testhibernate.entity.AnnotationExhibitor;
+import org.testhibernate.entity.CreditCardPayment;
 import org.testhibernate.entity.Exhibitor;
+import org.testhibernate.entity.Payment;
+import org.testhibernate.entity.WirePayment;
 
 /**
  * @author makar
@@ -41,6 +44,36 @@ public class Main {
 		Session session = null;
 		try{
 			session = buildSession();
+			System.out.println("Executing Polymorphic HQL");
+			
+			List<Payment> results = session.createQuery("from Payment p").list();
+			System.out.println("Retrieving "+results.size()+" Records:");
+			Iterator<Payment> it = results.iterator();
+			String dots = "------------------";
+			while(it.hasNext()){
+				Payment p = it.next();
+				System.out.println(dots);
+				if(p instanceof CreditCardPayment){
+					System.out.println("Credit Card Payment");
+					System.out.println(dots);
+					CreditCardPayment cc = (CreditCardPayment) p;
+					System.out.println("PaymentId: "+cc.getPaymentID());
+					System.out.println("Credi Card Number: "+cc.getCreditCardNumber());
+				}
+				
+				if(p instanceof WirePayment){
+					System.out.println("Wire Payment");
+					System.out.println(dots);
+					WirePayment wire = (WirePayment) p;
+					System.out.println("PaymentId: "+wire.getPaymentID());
+					System.out.println("BankName: "+wire.getBankName());
+					System.out.println("BankRef: "+wire.getBankRef());
+				}
+			}
+			
+			
+			
+			
 			session.beginTransaction();
 			
 			AnnotationExhibitor exhibitor = new AnnotationExhibitor();
@@ -53,7 +86,6 @@ public class Main {
 			System.out.println(e.getMessage());
 		}finally{
 			if(session != null){
-				session.flush();
 				session.close();
 			}
 		}

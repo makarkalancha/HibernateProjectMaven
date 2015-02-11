@@ -8,6 +8,10 @@ import java.io.Serializable;
  * Time: 2:40:23 PM
  */
 public class Payment implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private char paymentID;
 	private float paymentAmount;
 	
